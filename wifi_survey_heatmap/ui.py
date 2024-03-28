@@ -362,7 +362,7 @@ class FloorplanPanel(wx.Panel):
         res = {}
         count = 0
         # Number of steps in total (for the progress computation)
-        steps = 5
+        steps = 6
         # Check if we are connected to an AP, all the
         # rest doesn't any sense otherwise
         if not self.collector.check_associated():
@@ -401,6 +401,17 @@ class FloorplanPanel(wx.Panel):
         if not self._check_bssid():
             self._abort("BSSID check failed")
             return
+        
+        self.parent.SetStatusText('Running speedtest-cli...')
+        self.Refresh()
+        speedtest_results = self.collector.run_speedtest()
+        res['speedtest'] = speedtest_results
+        self.survey_points[-1].set_progress(4, steps)
+
+        # Check if we're still connected to the same AP
+        if not self._check_bssid():
+            self._abort("BSSID check failed")
+            return
 
         # Get all signal metrics from nl
         self.parent.SetStatusText(
@@ -409,7 +420,7 @@ class FloorplanPanel(wx.Panel):
         data = self.collector.scanner.get_iface_data()
         # Merge dicts
         res = {**res, **data}
-        self.survey_points[-1].set_progress(4, steps)
+        self.survey_points[-1].set_progress(5, steps)
 
         # Scan APs in the neighborhood
         if self.parent.scan:
@@ -417,7 +428,7 @@ class FloorplanPanel(wx.Panel):
                 'Scanning all access points within reach...')
             self.Refresh()
             res['scan_results'] = self.collector.scan_all_access_points()
-        self.survey_points[-1].set_progress(5, steps)
+        self.survey_points[-1].set_progress(6, steps)
 
         # Save results and mark survey point as complete
         self.survey_points[-1].set_result(res)

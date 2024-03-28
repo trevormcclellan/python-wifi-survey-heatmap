@@ -45,6 +45,7 @@ requires = [
     'iperf3==0.1.11',
     'matplotlib==3.5.2',
     'scipy==1.8.1',
+    'speedtest-cli==2.1.3',
     'libnl3==0.3.0',
 ]
 

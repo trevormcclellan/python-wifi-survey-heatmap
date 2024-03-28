@@ -41,6 +41,7 @@ from time import sleep
 from wifi_survey_heatmap.libnl import Scanner
 
 import iperf3
+import speedtest
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,15 @@ class Collector(object):
             logger.error('iperf error %s; retrying', res.error)
         logger.debug('iperf result: %s', res)
         return res
+
+    def run_speedtest(self):
+        s = speedtest.Speedtest()
+
+        s.get_best_server()
+        s.download()
+        s.upload()
+
+        return s.results.dict()
 
     def check_associated(self):
         logger.debug('Checking association with AP...')

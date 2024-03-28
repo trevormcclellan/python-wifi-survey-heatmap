@@ -22,11 +22,12 @@ RUN apt-get update && \
     python3-setuptools \
     python3-wheel \
     python3-wxgtk4.0 \
+    speedtest-cli \
     wireless-tools \
     zlib1g zlib1g-dev \
   && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install iperf3 matplotlib wheel libnl3
+RUN pip3 install iperf3 matplotlib speedtest-cli wheel libnl3
 
 COPY . /app
 
@@ -34,10 +35,10 @@ RUN cd /app && \
   python3 setup.py develop && \
   pip3 freeze > /app/requirements.installed
 
-LABEL maintainer="jason@jasonantman.com" \
+LABEL maintainer="trevormcclellan@gmail.com" \
       org.label-schema.build-date="$build_date" \
-      org.label-schema.name="jantman/python-wifi-survey-heatmap" \
-      org.label-schema.url="https://github.com/jantman/python-wifi-survey-heatmap" \
+      org.label-schema.name="trevorcclellan/python-wifi-survey-heatmap" \
+      org.label-schema.url="https://github.com/trevormcclellan/python-wifi-survey-heatmap" \
       org.label-schema.vcs-url="$repo_url" \
       org.label-schema.vcs-ref="$repo_ref" \
       org.label-schema.version="$repo_ref" \

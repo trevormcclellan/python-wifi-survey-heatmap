@@ -137,6 +137,8 @@ class HeatMapGenerator(object):
         'udp_download_Mbps': 'Download (UDP) [MBit/s]',
         'tcp_upload_Mbps': 'Upload (TCP) [MBit/s]',
         'udp_upload_Mbps': 'Upload (UDP) [MBit/s]',
+        'speedtest_download_Mbps': 'Download (speedtest-cli) [MBit/s]',
+        'speedtest_upload_Mbps': 'Upload (speedtest-cli) [MBit/s]',
         'jitter_download': 'UDP Download Jitter [ms]',
         'jitter_upload': 'UDP Upload Jitter [ms]',
         'frequency': 'Wi-Fi frequency [GHz]',
@@ -232,6 +234,13 @@ class HeatMapGenerator(object):
                     row['result']['udp-reverse']['Mbps'])
                 a['jitter_upload'].append(
                     row['result']['udp-reverse']['jitter_ms'])
+            if 'speedtest' in row['result']:
+                a['speedtest_download_Mbps'].append(
+                    row['result']['speedtest']['download'] / 1e6
+                )
+                a['speedtest_upload_Mbps'].append(
+                    row['result']['speedtest']['upload'] / 1e6
+                )
             a['tx_power'].append(row['result']['tx_power'])
             a['frequency'].append(row['result']['frequency']*1e-3)
             if 'bitrate' in row['result']:
@@ -388,7 +397,7 @@ class HeatMapGenerator(object):
             return
         logger.debug('Plotting: %s', key)
         pp.rcParams['figure.figsize'] = (
-            self._image_width / 300, self._image_height / 300
+            (self._image_width / 300) + 2, self._image_height / 300
         )
         fig, ax = pp.subplots()
         ax.set_title(title)
